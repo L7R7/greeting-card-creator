@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>Result</h1>
+<a href="new">Create a new card</a>
+<p th:text="${count} + ' Cards'"></p>
+<div th:if="${createdCards!= null}">
+  <h2>Created cards</h2>
+  <ul>
+    <th:block th:object="${createdCards}" th:each="card : ${createdCards}">
+      <li><a th:href="'edit/' + ${card.id}" th:text="${card.id}">ID</a></li>
+    </th:block>
+  </ul>
+</div>
+<div th:if="${publishedCards!= null}">
+  <h2>Published cards</h2>
+  <ul>
+    <th:block th:object="${publishedCards}" th:each="card : ${publishedCards}">
+      <li><a th:href="'edit/' + ${card.id}" th:text="${card.id}">ID</a></li>
+    </th:block>
+  </ul>
+</div>
+</body>
+</html>
