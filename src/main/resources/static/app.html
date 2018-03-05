@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<div id="app">
+    <h1>Home</h1>
+    <p>{{ cardCount }} Cards are known</p>
+
+    <h2>Created cards</h2>
+    <ul>
+        <li v-for="card in createdCards">{{ card }}</li>
+    </ul>
+    <h2>Published cards</h2>
+    <ul>
+        <li v-for="card in publishedCards">{{ card }}</li>
+    </ul>
+</div>
+</body>
+
+<script src="https://unpkg.com/vue"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            cardCount: 0,
+            createdCards: [],
+            publishedCards: []
+        },
+        created() {
+            fetch('created')
+                .then(response => response.json())
+                .then(json => this.createdCards = json);
+            fetch('published')
+                .then(response => response.json())
+                .then(json => this.publishedCards = json);
+            fetch('count')
+                .then(response => response.json())
+                .then(json => this.count = json);
+        }
+    })
+</script>
+</html>
