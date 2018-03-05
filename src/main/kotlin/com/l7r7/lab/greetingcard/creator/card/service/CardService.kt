@@ -34,5 +34,13 @@ class CardService(private val cardRepository: CardRepository) {
 
     fun findAllPublished() = cardRepository.findAll().filter { card -> card.status == PUBLISHED }
 
+    fun findAllPublishedExternal() = cardRepository.findAll()
+            .filter { card -> card.status == PUBLISHED }
+            .map { it.toExternalCard() }
+
     fun count() = cardRepository.count()
 }
+
+data class ExternalCard(val id: UUID, val title: String, val author: String, val greetingText: String, val published: Instant)
+
+fun Card.toExternalCard() = ExternalCard(this.id, this.title, this.author, this.greetingText, this.updated)
