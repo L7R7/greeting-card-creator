@@ -25,11 +25,14 @@ class CardController(private val cardService: CardService) {
 
     @GetMapping("edit/{id}")
     fun editPage(@PathVariable("id") id: UUID, model: Model): String {
-        cardService.findById(id)
-                .subscribe({ card ->
-                    if (card.status == CardStatus.CREATED) model.addAttribute("card", card)
-                    else model.addAttribute("errorMessage", "Card is not in state 'created'")
-                }, { model.addAttribute("errorMessage", "ID not found") })
+        val blockOptional = cardService.findById(id).blockOptional()
+        if (blockOptional.isPresent) {
+            val card = blockOptional.get()
+            if (card.status == CardStatus.CREATED) model.addAttribute("card", card)
+            else model.addAttribute("errorMessage", "Card is not in state 'created'")
+        } else {
+            model.addAttribute("errorMessage", "ID not found")
+        }
         return "edit"
     }
 
@@ -41,32 +44,36 @@ class CardController(private val cardService: CardService) {
 
     @PostMapping("new")
     fun newCard(model: Model, @ModelAttribute card: NewCardDto): String {
-        cardService.create(card.title, card.author, card.greetingText)
+        val blockOptional = cardService.create(card.title, card.author, card.greetingText)
                 .doOnEach { t -> log.warn(t.toString()) }
                 .map { c -> CreatedCardDto(c.id, c.author, c.title, c.greetingText) }
-                .subscribe { c -> model.addAttribute("card", c) }
+                .blockOptional()
+
+        if (blockOptional.isPresent) model.addAttribute("card", blockOptional.get())
+        else log.error("card not present")
+
         return "created"
     }
 
     @PostMapping("edit")
     fun updateCard(model: Model, @ModelAttribute cardAttribute: CreatedCardDto): String {
-        cardService.update(cardAttribute.id, cardAttribute.title, cardAttribute.author, cardAttribute.greetingText)
-                .subscribe({ c ->
-                    model.addAttribute("card", c)
-                    model.addAttribute("success", true)
-                }, { model.addAttribute("success", false) })
+        val blockOptional = cardService.update(cardAttribute.id, cardAttribute.title, cardAttribute.author, cardAttribute.greetingText).blockOptional()
+        if (blockOptional.isPresent) {
+            model.addAttribute("card", blockOptional.get())
+            model.addAttribute("success", true)
+        } else model.addAttribute("success", false)
         return "updated"
     }
 
     @PostMapping("publish")
     fun publish(model: Model, @ModelAttribute cardAttribute: CardToPublish): String {
-        cardService.publish(cardAttribute.id)
-                .subscribe({
-                    model.addAttribute("card", it)
-                    model.addAttribute("success", true)
-                }, {
-                    model.addAttribute("success", false)
-                })
+        val blockOptional = cardService.publish(cardAttribute.id).blockOptional()
+        if (blockOptional.isPresent) {
+            model.addAttribute("card", blockOptional.get())
+            model.addAttribute("success", true)
+        } else
+            model.addAttribute("success", false)
+
         return "published"
     }
 }
