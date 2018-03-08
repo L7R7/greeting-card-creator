@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>New Card</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>New Card</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style th:replace="style">
+    </style>
 </head>
 <body>
-<h1>Create a new Card</h1>
-<form action="#" th:action="@{/new}" th:object="${card}" method="post">
-  <p>Title: <input type="text" th:field="*{title}"/></p>
-  <p>Greeting text: <input type="text" th:field="*{greetingText}"/></p>
-  <p>author: <input type="text" th:field="*{author}"/></p>
-  <p><input type="submit" value="Create"/></p>
-</form>
-<a th:href="@{/}" href="#">Back to front page</a>
+<div class="container">
+    <h1>Create a new Card</h1>
+    <form action="#" th:action="@{/new}" th:object="${card}" method="post">
+        <p>Title: <input type="text" th:field="*{title}"/></p>
+        <p>Greeting text: <textarea type="text" th:field="*{greetingText}"></textarea></p>
+        <p>author: <input type="text" th:field="*{author}"/></p>
+        <p><input type="submit" value="Create"/></p>
+    </form>
+    <a th:href="@{/}" href="#">Back to front page</a>
+</div>
 </body>
 </html>

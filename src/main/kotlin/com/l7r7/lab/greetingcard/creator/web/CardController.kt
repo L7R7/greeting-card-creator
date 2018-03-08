@@ -45,7 +45,6 @@ class CardController(private val cardService: CardService) {
     @PostMapping("new")
     fun newCard(model: Model, @ModelAttribute card: NewCardDto): String {
         val blockOptional = cardService.create(card.title, card.author, card.greetingText)
-                .doOnEach { t -> log.warn(t.toString()) }
                 .map { c -> CreatedCardDto(c.id, c.author, c.title, c.greetingText) }
                 .blockOptional()
 

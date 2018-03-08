@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Edit A Card</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Edit A Card</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style th:replace="style">
+    </style>
 </head>
 <body>
-<h1>Edit a Card</h1>
-<div th:if="${card!= null}">
-  <form action="#" th:object="${card}" method="post">
-    <p th:text="${card.id}">ID</p> <input hidden th:field="*{id}"/>
-    <p>Title: <input type="text" th:field="*{title}"/></p>
-    <p>Greeting text: <input type="text" th:field="*{greetingText}"/></p>
-    <p>author: <input type="text" th:field="*{author}"/></p>
-    <p>
-      <button th:formaction="@{/edit}">Update</button>
-    </p>
-    <p>
-      <button th:formaction="@{/publish}">Publish</button>
-    </p>
-  </form>
+<div class="container"><h1>Edit a Card</h1>
+    <div th:if="${card!= null}">
+        <form action="#" th:object="${card}" method="post">
+            <p th:text="${card.id}">ID</p> <input hidden th:field="*{id}"/>
+            <p>Title: <input type="text" th:field="*{title}"/></p>
+            <p>Greeting text: <textarea th:field="*{greetingText}"></textarea></p>
+            <p>author: <input type="text" th:field="*{author}"/></p>
+            <p>
+                <button th:formaction="@{/edit}">Update</button>
+            </p>
+            <p>
+                <button th:formaction="@{/publish}">Publish</button>
+            </p>
+        </form>
+    </div>
+    <div th:if="${errorMessage !=null}">
+        <p th:text="${errorMessage}">Error Message</p>
+    </div>
+    <a th:href="@{/}" href="#">Back to front page</a>
 </div>
-<div th:if="${errorMessage !=null}">
-  <p th:text="${errorMessage}">Error Message</p>
-</div>
-<a th:href="@{/}" href="#">Back to front page</a>
 </body>
 </html>

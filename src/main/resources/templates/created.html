@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Card created</title>
+    <style th:replace="style">
+    </style>
 </head>
 <body>
-<h1>Card created!</h1>
-<div th:object="${card}">
-    <p th:text="'Title: ' + ${card.title}">title</p>
-    <p th:text="'Author: ' + ${card.author}">author</p>
-    <p th:text="'Greeting Text: ' + ${card.greetingText}">Greeting text</p>
-    <a th:href="'edit/' + ${card.id}" href="#">Edit the card</a>
+<div class="container">
+    <h1>Card created!</h1>
+    <div th:object="${card}">
+        <p th:text="'Title: ' + ${card.title}">title</p>
+        <p th:text="'Author: ' + ${card.author}">author</p>
+        <p th:text="'Greeting Text: ' + ${card.greetingText}">Greeting text</p>
+        <a th:href="'edit/' + ${card.id}" href="#">Edit the card</a>
+    </div>
+    <a th:href="@{/}" href="#">Back to front page</a>
 </div>
-<a th:href="@{/}" href="#">Back to front page</a>
 </body>
 </html>
